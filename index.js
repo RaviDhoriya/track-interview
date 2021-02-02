@@ -1,11 +1,14 @@
 const express = require("express");
+const bodyparser=require("body-parser");
+const cors=require("cors");
+
 const app=express();
-
+app.use(bodyparser.json());
 app.use(express.static(__dirname+"/public"));
+app.use(cors());
 
-app.get("/api/hello",(req,res)=>{
-    res.send({hello:"World"});
-});
+app.use("/api",require("./routes"));
+
 app.get("/",(req,res)=>{
     res.render("index.html");
 });
