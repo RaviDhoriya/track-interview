@@ -6,10 +6,13 @@ const app=express();
 app.use(bodyparser.json());
 app.use(express.static(__dirname+"/public"));
 app.use(cors());
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', __dirname + '/public');
 
 app.use("/api",require("./routes"));
 
-app.get("/",(req,res)=>{
+app.get("*",(req,res)=>{
     res.render("index.html");
 });
 
