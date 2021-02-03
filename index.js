@@ -4,8 +4,9 @@ const cors=require("cors");
 
 const app=express();
 app.use(bodyparser.json());
-app.use(express.static(__dirname+"/public"));
 app.use(cors());
+
+app.use(express.static(__dirname+"/public"));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/public');
