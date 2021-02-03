@@ -26,9 +26,15 @@ api.jobAdd=(req,res)=>{
     rec.ctc_min=body.ctc_min;
     rec.ctc_max=body.ctc_max;
     rec.location=body.location;
-
+    rec.stamp=new Date();
+    rec.applied=new Date(body.applied);
     rec.save((err,data)=>{
-        res.send(Success(data,"New job added"));
+        if(err){
+            console.error(err);
+            res.send(Error("Failed to add new job"));
+        }else{
+            res.send(Success(data,"New job added"));
+        }
     });
 }
 module.exports=api;

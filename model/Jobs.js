@@ -17,7 +17,8 @@ const jobsSchema = new Schema({
     skills: [String],
     ctc_min: Number,
     ctc_max: Number,
-    location: String
+    location: String,
+    stamp:Date
 });
 
 const Jobs = mongoose.model("Jobs",jobsSchema);
