@@ -20,7 +20,7 @@ api.getJobDetails = (req, res) => {
     } else {
       if (data.length > 0) {
         var op = JSON.parse(JSON.stringify(data[0]));
-        Activity.find({ job_id: op._id }, (err2, activities) => {
+        Activity.find({ job_id: op._id }).sort({stamp:-1}).then((activities) => {
           op.activities = activities;
           res.send(Success(op));
         });

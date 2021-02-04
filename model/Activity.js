@@ -6,7 +6,8 @@ const activitySchema=new Schema({
     stamp:Date,
     body:String,
     is_schedule:Boolean,
-    schedule_date:Date 
+    schedule_date:Date,
+    schedule_done:Boolean 
 });
 
 const Activity=mongoose.model("Activity",activitySchema);
