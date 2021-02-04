@@ -37,6 +37,8 @@ api.jobAdd = (req, res) => {
   rec.name = body.name;
   rec.company = body.company;
   rec.job_url = body.job_url;
+  rec.review_url = body.review_url;
+  rec.linkedin_url=body.linkedin_url;
   rec.hr = body.hr;
   rec.status = "applied";
   rec.source = body.source;
@@ -70,6 +72,8 @@ api.jobEdit = (req, res) => {
       rec.name = body.name;
       rec.company = body.company;
       rec.job_url = body.job_url;
+      rec.review_url = body.review_url;
+      rec.linkedin_url=body.linkedin_url;
       rec.hr = body.hr;
       rec.status = "applied";
       rec.source = body.source;

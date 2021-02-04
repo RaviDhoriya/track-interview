@@ -6,6 +6,8 @@ const jobsSchema = new Schema({
     name: String,
     company: String,
     job_url: String,
+    review_url: String,
+    linkedin_url:String,
     hr:{
         name: String,
         email: String,
