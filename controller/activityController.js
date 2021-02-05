@@ -8,14 +8,8 @@ api.activityAdd = (req, res) => {
   rec.job_id = body.job_id;
   rec.body = body.body;
   rec.is_schedule = body.is_schedule;
-  if (rec.is_schedule) {
-    rec.schedule_date = new Date(body.schedule_date);
-  } else {
-    rec.schedule_date = null;
-  }
+  rec.schedule_date = new Date(body.schedule_date);
   rec.stamp = new Date();
-  console.log(body);
-  console.log(rec);
   rec.save((err, activity) => {
     if (err) {
       console.error(err);
@@ -50,11 +44,7 @@ api.activityEdit = (req, res) => {
       var rec = data;
       rec.body = body.body;
       rec.is_schedule = body.is_schedule;
-      if (rec.is_schedule) {
-        rec.schedule_date = new Date(body.schedule_date);
-      } else {
-        rec.schedule_date = null;
-      }
+      rec.schedule_date = new Date(body.schedule_date);
       rec.save((err2, activity) => {
         if (err2) {
           console.error(err2);
