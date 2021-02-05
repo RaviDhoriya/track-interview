@@ -40,7 +40,7 @@ api.jobAdd = (req, res) => {
   rec.review_url = body.review_url;
   rec.linkedin_url=body.linkedin_url;
   rec.hr = body.hr;
-  rec.status = "applied";
+  rec.status = body.status;
   rec.source = body.source;
   rec.notes = body.notes;
   rec.skills = body.skills;
@@ -75,7 +75,7 @@ api.jobEdit = (req, res) => {
       rec.review_url = body.review_url;
       rec.linkedin_url=body.linkedin_url;
       rec.hr = body.hr;
-      rec.status = "applied";
+      rec.status = body.status;
       rec.source = body.source;
       rec.notes = body.notes;
       rec.skills = body.skills;
@@ -116,4 +116,18 @@ api.jobDelete = (req, res) => {
     }
   });
 };
+api.jobStatus=(req,res)=>{
+  var {body}=req;
+  Jobs.findById(body.job_id,(err,job)=>{
+    if(err){
+      console.error(err);
+      res.send(Error("Failed to change Job status"));
+    }else{
+      job.status=body.status;
+      job.save(()=>{
+        res.send(Success(job, "Job status updated!"));
+      });
+    }
+  });
+}
 module.exports = api;

@@ -6,4 +6,5 @@ module.exports=(router)=>{
     router.post("/jobs",jobs.jobAdd);
     router.put("/jobs",jobs.jobEdit);
     router.delete("/jobs",jobs.jobDelete);
+    router.post("/jobs/:job_id",jobs.jobStatus);
 };
