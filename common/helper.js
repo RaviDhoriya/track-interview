@@ -1,5 +1,5 @@
 const helpers={};
-
+helpers.JWT_SECRET="Th!s_IS_SomeC0mplex-s3cr3t&*)#7004";
 helpers.Success=(data,msg=null)=>{
     if(msg===null){
         return {status:true,data:data}
