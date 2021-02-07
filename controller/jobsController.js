@@ -4,7 +4,9 @@ const { Success, Error } = require("../common/helper");
 var api = {};
 api.getAll = (req, res) => {
   var user=req.decoded;
-  Jobs.updateMany({user_id:user._id});
+  Jobs.updateMany({user_id:user._id},(err,data)=>{
+    console.log(err,data);
+  });
   Jobs.find({user_id:user._id},(err, data) => {
     if (err) {
       console.error(err);
