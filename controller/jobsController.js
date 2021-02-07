@@ -4,9 +4,6 @@ const { Success, Error } = require("../common/helper");
 var api = {};
 api.getAll = (req, res) => {
   var user=req.decoded;
-  Jobs.updateMany({user_id:user._id},(err,data)=>{
-    console.log(err,data);
-  });
   Jobs.find({user_id:user._id},(err, data) => {
     if (err) {
       console.error(err);
@@ -17,7 +14,8 @@ api.getAll = (req, res) => {
   });
 };
 api.getJobDetails = (req, res) => {
-  Jobs.find({ _id: req.params.job_id }, (err, data) => {
+  var user=req.decoded;
+  Jobs.find({ _id: req.params.job_id,user_id:user._id }, (err, data) => {
     if (err) {
       console.error(err);
       res.send(Error("Failed to get Job details"));
@@ -37,9 +35,9 @@ api.getJobDetails = (req, res) => {
 
 api.jobAdd = (req, res) => {
   var { body } = req;
-  var {user_id}=req.decoded;
+  var user=req.decoded;
   var rec = new Jobs();
-  rec.user_id=user_id;
+  rec.user_id=user._id;
   rec.name = body.name;
   rec.company = body.company;
   rec.job_url = body.job_url;
@@ -67,7 +65,6 @@ api.jobAdd = (req, res) => {
 
 api.jobEdit = (req, res) => {
   var { body } = req;
-  var {user_id}=req.decoded;
   var job_id = body.job_id;
   Jobs.findById(job_id, (err, data) => {
     if (err) {
@@ -75,7 +72,6 @@ api.jobEdit = (req, res) => {
       console.error(err);
     } else {
       var rec = data;
-      rec.user_id=user_id;
       rec.name = body.name;
       rec.company = body.company;
       rec.job_url = body.job_url;
@@ -103,9 +99,10 @@ api.jobEdit = (req, res) => {
 };
 api.jobDelete = (req, res) => {
   var { body } = req;
-
+  var user=req.decoded;
   var job_id = body.job_id;
-  Jobs.deleteOne({ _id: job_id }, (err) => {
+
+  Jobs.deleteOne({ _id: job_id,user_id:user._id }, (err) => {
     if (err) {
       console.error(err);
       res.send(Error("Failed to delete job"));
@@ -125,15 +122,22 @@ api.jobDelete = (req, res) => {
 };
 api.jobStatus=(req,res)=>{
   var {body}=req;
-  Jobs.findById(body.job_id,(err,job)=>{
+  var user=req.decoded;
+
+  Jobs.find({_id:body.job_id,user_id:user._id},(err,jobs)=>{
     if(err){
       console.error(err);
       res.send(Error("Failed to change Job status"));
     }else{
-      job.status=body.status;
-      job.save(()=>{
-        res.send(Success(job, "Job status updated!"));
-      });
+      if(jobs.length===0){
+        res.send(Error("Job not found"));
+      }else{
+        var job=jobs[0];
+        job.status=body.status;
+        job.save(()=>{
+          res.send(Success(job, "Job status updated!"));
+        });
+      }
     }
   });
 }
