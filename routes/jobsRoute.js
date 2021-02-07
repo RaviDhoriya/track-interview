@@ -1,10 +1,10 @@
 const jobs=require("../controller/jobsController");
-
+const middleware=require("../controller/authMiddleware");
 module.exports=(router)=>{
-    router.get("/jobs",jobs.getAll);
-    router.get("/jobs/:job_id",jobs.getJobDetails);
-    router.post("/jobs",jobs.jobAdd);
-    router.put("/jobs",jobs.jobEdit);
-    router.delete("/jobs",jobs.jobDelete);
-    router.post("/jobs/:job_id",jobs.jobStatus);
+    router.get("/jobs",middleware.validateUser,jobs.getAll);
+    router.get("/jobs/:job_id",middleware.validateUser,jobs.getJobDetails);
+    router.post("/jobs",middleware.validateUser,jobs.jobAdd);
+    router.put("/jobs",middleware.validateUser,jobs.jobEdit);
+    router.delete("/jobs",middleware.validateUser,jobs.jobDelete);
+    router.post("/jobs/:job_id",middleware.validateUser,jobs.jobStatus);
 };

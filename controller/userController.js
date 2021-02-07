@@ -39,9 +39,10 @@ api.login = (req, res) => {
   var {email = "", password = ""} = body;
   var passwordMD = crypto.createHash("md5").update(password).digest("hex");
   User.find({ email: email, password: passwordMD }, (err, users) => {
-    if (err) {
+    if (err || users.length===0) {
       res.send(Error("Email address or password is wrong."));
     } else {
+
       var user = users[0];
       user.last_login = new Date();
       user.save((err2, newUser) => {

@@ -3,7 +3,9 @@ const { Success, Error } = require("../common/helper");
 
 var api = {};
 api.getAll = (req, res) => {
-  Jobs.find((err, data) => {
+  var user=req.decoded;
+  Jobs.updateMany({user_id:user._id});
+  Jobs.find({user_id:user._id},(err, data) => {
     if (err) {
       console.error(err);
       res.send(Error("Failed to get Jobs"));
@@ -33,7 +35,9 @@ api.getJobDetails = (req, res) => {
 
 api.jobAdd = (req, res) => {
   var { body } = req;
+  var {user_id}=req.decoded;
   var rec = new Jobs();
+  rec.user_id=user_id;
   rec.name = body.name;
   rec.company = body.company;
   rec.job_url = body.job_url;
@@ -61,7 +65,7 @@ api.jobAdd = (req, res) => {
 
 api.jobEdit = (req, res) => {
   var { body } = req;
-
+  var {user_id}=req.decoded;
   var job_id = body.job_id;
   Jobs.findById(job_id, (err, data) => {
     if (err) {
@@ -69,6 +73,7 @@ api.jobEdit = (req, res) => {
       console.error(err);
     } else {
       var rec = data;
+      rec.user_id=user_id;
       rec.name = body.name;
       rec.company = body.company;
       rec.job_url = body.job_url;
