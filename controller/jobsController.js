@@ -4,13 +4,8 @@ const { Success, Error } = require("../common/helper");
 var api = {};
 api.getAll = (req, res) => {
   var user=req.decoded;
-  Jobs.find({user_id:user._id},(err, data) => {
-    if (err) {
-      console.error(err);
-      res.send(Error("Failed to get Jobs"));
-    } else {
+  Jobs.find({user_id:user._id}).sort({stamp:-1}).then((data) => {
       res.send(Success(data));
-    }
   });
 };
 api.getJobDetails = (req, res) => {
