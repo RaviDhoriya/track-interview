@@ -21,8 +21,9 @@ const jobsSchema = new Schema({
     ctc_min: Number,
     ctc_max: Number,
     location: String,
-    stamp:Date
-});
+    stamp:Date,
+    updated:Date
+},{strict:false});
 
 const Jobs = mongoose.model("Jobs",jobsSchema);
 

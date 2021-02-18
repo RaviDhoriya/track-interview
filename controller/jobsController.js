@@ -1,12 +1,21 @@
 const { Jobs, Activity } = require("../model");
 const { Success, Error } = require("../common/helper");
+const mongoose = require("mongoose");
 
 var api = {};
 api.getAll = (req, res) => {
   var user=req.decoded;
-  Jobs.find({user_id:user._id}).sort({stamp:-1}).then((data) => {
+  var body=req.body;
+  var query={user_id:user._id};
+  if(body.filter){
+    query={...body.filter,...query};
+  }
+  Jobs.find(query).sort({updated:-1}).then((data) => {
       res.send(Success(data));
   });
+  /*Jobs.aggregate([{$lookup:{ from: "activities",localField:"_id",foreignField: "job_id",as:"activities"}}]).then((data) => {
+    res.send(Success(data));
+  });*/
 };
 api.getJobDetails = (req, res) => {
   var user=req.decoded;
@@ -47,6 +56,7 @@ api.jobAdd = (req, res) => {
   rec.ctc_max = body.ctc_max;
   rec.location = body.location;
   rec.stamp = new Date();
+  rec.updated=new Date();
   rec.applied = new Date(body.applied);
   rec.save((err, data) => {
     if (err) {
@@ -81,6 +91,7 @@ api.jobEdit = (req, res) => {
       rec.ctc_max = body.ctc_max;
       rec.location = body.location;
       rec.applied = new Date(body.applied);
+      rec.updated=new Date();
       rec.save((err2, data2) => {
         if (err2) {
           console.error(err2);
@@ -135,5 +146,20 @@ api.jobStatus=(req,res)=>{
       }
     }
   });
+}
+api.getStats=(req,res)=>{
+  var user=req.decoded;
+  Jobs.aggregate([
+    {$match: {
+      user_id: { $eq: mongoose.Types.ObjectId(user._id) }
+    }},
+    {$group: { _id: "$status", "count": {$sum: 1} } 
+  
+    }]).sort({count:-1}).then((out)=>{
+      res.send(Success(out));
+    })
+  .catch((error)=>{
+    res.send(Error(error));
+  })
 }
 module.exports = api;

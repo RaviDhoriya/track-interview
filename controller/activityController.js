@@ -10,15 +10,21 @@ api.activityAdd = (req, res) => {
   rec.is_schedule = body.is_schedule;
   rec.schedule_date = new Date(body.schedule_date);
   rec.stamp = new Date();
-  rec.save((err, activity) => {
+  rec.save(async (err, activity) => {
     if (err) {
       console.error(err);
       res.send(Error("Failed to add new activity"));
     } else {
       res.send(Success(activity, "New activity created"));
+      let job=await Jobs.findOne({_id: rec.job_id });
+      if(job){
+        job.updated=new Date();
+        job.save();
+      }
     }
   });
 };
+
 api.activityDelete = (req, res) => {
   var { body } = req;
 
