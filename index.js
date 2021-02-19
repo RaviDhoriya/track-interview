@@ -20,3 +20,5 @@ app.get("*",(req,res)=>{
 app.listen(process.env.PORT || 5001,()=>{
     console.log("Track Interview API Server started on PORT: "+ (process.env.PORT || 5001));
 });
+
+module.exports=app; //Export to use in Test

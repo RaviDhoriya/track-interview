@@ -37,6 +37,10 @@ api.getProfile = (req, res) => {
 api.login = (req, res) => {
   var { body } = req;
   var {email = "", password = ""} = body;
+  if(email.trim().length === 0 || password.trim().length ===0){
+    res.status(500).send(Error("Username and a password are required"));
+    return;
+  }
   var passwordMD = crypto.createHash("md5").update(password).digest("hex");
   User.find({ email: email, password: passwordMD }, (err, users) => {
     if (err || users.length===0) {
