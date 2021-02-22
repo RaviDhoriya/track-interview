@@ -7,8 +7,8 @@ api.getAll = (req, res) => {
   var user=req.decoded;
   var body=req.body;
   var query={user_id:user._id};
-  if(body.filter){
-    query={...body.filter,...query};
+  if(req.query){
+    query={...req.query,...query};
   }
   Jobs.find(query).sort({updated:-1}).then((data) => {
       res.send(Success(data));
